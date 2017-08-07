@@ -10,7 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: [{last: 15}, {last: 40}, {last: 122}]
+      data: null
     }
     this.displayFutures = this.displayFutures.bind(this)
   }
@@ -24,8 +24,7 @@ class App extends Component {
       console.log('RESP', resp)
       if(resp.data.success) {
         console.log(resp.data.lists);
-        var fakeData = [{last: 15}, {last: 40}, {last: 122}]
-        this.setState({data: fakeData})
+        this.setState({data: resp.data.lists})
         console.log("THIS STATE DATA", this.state.data)
       } else {
         console.log('not successful /getfutures')

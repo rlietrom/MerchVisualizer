@@ -4,62 +4,60 @@ import { max, select, scaleLinear} from 'd3'
 
 class BarChart extends Component {
   constructor(props){
-      super(props)
-      this.state = {
-        lasts: null
-      }
-      this.createBarChart = this.createBarChart.bind(this)
-   }
+    super(props)
+    this.state = {
+      lasts: null
+    }
+    this.createBarChart = this.createBarChart.bind(this)
+  }
 
-   componentDidMount() {
+  componentDidMount() {
+    this.createBarChart();
+  }
+  componentDidUpdate() {
+    this.createBarChart()
+  }
 
-     var Lasts = this.props.data.map((obj) => {
-       return obj.last
-     })
-     this.setState({lasts: Lasts})
-     this.createBarChart()
-   }
+  createBarChart() {
+    // var Lasts = this.props.data.map((obj) => {
+    //   return obj.last
+    // })
 
-   componentWillMount() {
+    var Lasts = setTimeout(randomFunc, 1000)
+    const node = this.node
+    const dataMax = max(Lasts)
+    const yScale = scaleLinear()
+    .domain([0, dataMax])
+    .range([0, 600])
 
-   }
+    //enter
+    select(node)
+    .selectAll('rect')
+    .data(Lasts)
+    .enter()
+    .append('rect')
+    .style('fill', 'red')
 
-   componentDidUpdate() {
-     this.createBarChart()
-   }
+    //exit
+    select(node)
+    .selectAll('rect')
+    .data(Lasts)
+    .exit()
+    .remove()
 
-   createBarChart() {
-     const node = this.node
-     const dataMax = max(this.state.lasts)
-     const xScale = scaleLinear()
-      .domain([0, dataMax])
-      .range([0, 300])
+    //update
+    select(node)
+    .selectAll('rect')
+    .attr('height', d => yScale(d))
+    .attr('width', 25)
+    .attr('x', (d,i) => i * 25)
+    .attr('y', d => 600 - yScale(d))
+    .style('fill', 'pink')
+  }
 
-      select(node)
-        .selectAll('rect')
-        .data(this.state.lasts)
-        .enter()
-        .append('rect')
-
-     select(node)
-        .selectAll('rect')
-        .data(this.state.lasts)
-        .exit()
-        .remove()
-
-      select(node)
-        .selectAll('rect')
-        .data(this.state.lasts)
-        .style('fill', '#fe9922')
-        .attr('y', (d,i) => i * 25)
-        .attr('x', d => 200 - xScale(d))
-        .attr('width', d => xScale(d))
-        .attr('height', 25)
-   }
-
-   render() {
-     return <svg ref={node => this.node = node}
-    width={500} height={500}></svg>
-   }
-}
-export default BarChart
+  render() {
+    return <svg ref={node => this.node = node}
+      width={500} height={500}></svg>
+    }
+  }
+  export default BarChart
