@@ -7,7 +7,8 @@ var Schema = mongoose.Schema;
 var futuresSchema = new Schema({
   month_year: String,
   last: Number,
-  priorSettle: Number
+  priorSettle: Number,
+  updatedAt: Date
 });
 
 var FuturesList = mongoose.model('FuturesList', futuresSchema);
