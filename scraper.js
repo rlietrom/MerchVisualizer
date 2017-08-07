@@ -35,7 +35,7 @@ phantom.create()
     .then((array2d) => {
       array2d.forEach(function(array1d) {
         console.log('ARRAY 1D', array1d)
-        FuturesList.findOneAndUpdate({month_year: array1d[0]}, {last: array1d[1], priorSettle: array1d[2]}, function(err, existingMonth) {
+        FuturesList.findOneAndUpdate({month_year: array1d[0]}, {last: array1d[1], priorSettle: array1d[2], updatedAt: new Date().toISOString()}, function(err, existingMonth) {
           if(err) {
             console.log('could not find month, creating new')
             var newFuturesList = new FuturesList ({
