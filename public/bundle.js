@@ -47153,7 +47153,7 @@ var App = function (_Component) {
 
       axios({
         method: 'GET',
-        url: 'http://localhost:3000/getfutures'
+        url: 'https://merch-visualizer.herokuapp.com/'
       }).then(function (resp) {
         console.log('RESP', resp);
         if (resp.data.success) {
