@@ -5,11 +5,12 @@ const scrape = require('./scraper')
 var models = require('./models.js');
 var FuturesList = models.FuturesList;
 const routes = require("./routes/index")
+const scrape2 = require('./spotScraper')
 
 connect = mongoose.connect(process.env.MONGODB_URI);
 
 app.get('/api/scrape', function(req,res){
-  scrape(function(html){
+  scrape2(function(html){
     res.send(html)
   })
 })
@@ -17,8 +18,6 @@ app.get('/api/scrape', function(req,res){
 app.use(routes);
 
 app.use(express.static('public'))
-
-
 
 // app.get('/api/get_futures', function(req,res){
 //

@@ -11,8 +11,15 @@ var futuresSchema = new Schema({
   updatedAt: Date
 });
 
+var spotSchema = new Schema({
+  spotPrice: Number,
+  day: Date
+})
+
 var FuturesList = mongoose.model('FuturesList', futuresSchema);
+var Spot = mongoose.model('Spot', spotSchema);
 
 module.exports = {
-  FuturesList: FuturesList
+  FuturesList: FuturesList,
+  Spot: Spot
 };

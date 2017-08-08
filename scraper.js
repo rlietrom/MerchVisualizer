@@ -17,7 +17,7 @@ phantom.create()
   return sitepage.open('http://www.cmegroup.com/trading/agricultural/dairy/nonfat-dry-milk.html')
 })
 .then(status => {
-  console.log('STATUS', status)
+  // console.log('STATUS', status)
   if(status === 'success') {
     sitepage.evaluate(function(){
       var rows = document.querySelectorAll('table#quotesFuturesProductTable1 tr')
@@ -34,10 +34,10 @@ phantom.create()
     })
     .then((array2d) => {
       array2d.forEach(function(array1d) {
-        console.log('ARRAY 1D', array1d)
+        // console.log('ARRAY 1D', array1d)
         FuturesList.findOneAndUpdate({month_year: array1d[0]}, {last: array1d[1], priorSettle: array1d[2], updatedAt: new Date().toISOString()}, function(err, existingMonth) {
           if(err) {
-            console.log('could not find month, creating new')
+            // console.log('could not find month, creating new')
             var newFuturesList = new FuturesList ({
               month_year: array1d[0],
               last: array1d[1],
@@ -46,14 +46,14 @@ phantom.create()
             })
             newFuturesList.save(function(err, list) {
               if(err) {
-                console.log("error saving lists")
+                // console.log("error saving lists")
               }
               else {
-                console.log("successfully saved in mlab")
+                // console.log("successfully saved in mlab")
               }
             })
           } else {
-            console.log('month updated!')
+            // console.log('month updated!')
           }
         })
       })

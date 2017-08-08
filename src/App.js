@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import {Button} from 'semantic-ui-react'
+import {Button, Form, Input} from 'semantic-ui-react'
 import BarChart from './barchart'
+import Settings from './settings'
 var axios = require('axios');
 import { scaleLinear, max, select } from 'd3'
 const uuidv4 = require('uuid/v4')
@@ -10,7 +11,11 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: null
+      data: null,
+      spot: .89,
+      quote: null,
+      minMargin: null,
+      expectedCosts: null
     }
     this.displayFutures = this.displayFutures.bind(this)
   }
@@ -45,6 +50,29 @@ class App extends Component {
     }
   }
 
+  settingsContainer() {
+    return (
+      <div>
+        <Form>
+            <Form.Field inline>
+              <label>spot/quote</label>
+              <Input
+                placeholder='.91'
+                onChange={(e) => this.setState({quote: e.target.value})}/>
+              <label>minimum profit margin</label>
+              <Input
+                placeholder='.08'
+                onChange={(e) => this.setState({minMargin: e.target.value})}/>
+              <label>expected cost per month</label>
+              <Input
+                placeholder='.02'
+                onChange={(e) => this.setState({expectedCosts: e.target.value})}/>
+            </Form.Field>
+          </Form>
+      </div>
+    )
+  }
+
   render() {
     return (
       <div className="App">
@@ -54,6 +82,7 @@ class App extends Component {
         </Button>
         <BarChart key="123123123" data={this.state.data} />
         {this.displayFutures()}
+        {this.settingsContainer()}
       </div>
     );
   }

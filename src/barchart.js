@@ -19,11 +19,11 @@ class BarChart extends Component {
   }
 
   createBarChart() {
-    // var Lasts = this.props.data.map((obj) => {
-    //   return obj.last
-    // })
+    var Lasts = this.props.data.map((obj) => {
+      return obj.last
+    })
 
-    var Lasts = setTimeout(randomFunc, 1000)
+    // var Lasts = setTimeout(randomFunc, 1000)
     const node = this.node
     const dataMax = max(Lasts)
     const yScale = scaleLinear()
@@ -36,7 +36,7 @@ class BarChart extends Component {
     .data(Lasts)
     .enter()
     .append('rect')
-    .style('fill', 'red')
+
 
     //exit
     select(node)
@@ -52,7 +52,10 @@ class BarChart extends Component {
     .attr('width', 25)
     .attr('x', (d,i) => i * 25)
     .attr('y', d => 600 - yScale(d))
-    .style('fill', 'pink')
+    .style('fill', function(d) {
+      if(d > 99) {return 'green'}
+      else {return 'black'}
+    })
   }
 
   render() {
@@ -60,4 +63,4 @@ class BarChart extends Component {
       width={500} height={500}></svg>
     }
   }
-  export default BarChart
+  export default BarChart;
