@@ -23,7 +23,7 @@ class App extends Component {
   componentWillMount() {
     axios({
       method: 'GET',
-      url: 'https://merch-visualizer.herokuapp.com/'
+      url: 'https://merch-visualizer.herokuapp.com/api/scrape'
     })
     .then(resp => {
       console.log('RESP', resp)

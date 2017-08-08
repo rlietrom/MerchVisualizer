@@ -47153,7 +47153,7 @@ var App = function (_Component) {
 
       axios({
         method: 'GET',
-        url: 'https://merch-visualizer.herokuapp.com/'
+        url: 'https://merch-visualizer.herokuapp.com/api/scrape'
       }).then(function (resp) {
         console.log('RESP', resp);
         if (resp.data.success) {

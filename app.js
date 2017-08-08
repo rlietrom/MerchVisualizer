@@ -10,7 +10,7 @@ const scrape2 = require('./spotScraper')
 connect = mongoose.connect(process.env.MONGODB_URI);
 
 app.get('/api/scrape', function(req,res){
-  scrape2(function(html){
+  scrape(function(html){
     res.send(html)
   })
 })

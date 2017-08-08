@@ -14,7 +14,7 @@ phantom.create()
 })
 .then(page => {
   sitepage = page
-  return sitepage.open('http://www.cmegroup.com/trading/agricultural/dairy/nonfat-dry-milk.html')
+  return sitepage.open('https://www.cmegroup.com/trading/agricultural/dairy/nonfat-dry-milk.html')
 })
 .then(status => {
   // console.log('STATUS', status)
