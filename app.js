@@ -9,11 +9,13 @@ const scrape2 = require('./spotScraper')
 
 connect = mongoose.connect(process.env.MONGODB_URI);
 
-app.get('/api/scrape', function(req,res){
-  scrape(function(html){
-    res.send(html)
+app.get('/getfutures', function(req,res){
+  FuturesList.find({})
+  .then((list) => {
+    res.json({success: true, lists: list})
   })
 })
+
 
 app.use(routes);
 

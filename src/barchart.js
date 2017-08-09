@@ -19,47 +19,49 @@ class BarChart extends Component {
   }
 
   createBarChart() {
-    var Lasts = this.props.data.map((obj) => {
-      return obj.last
-    })
+    var profit = this.props.profit
+    var Lasts = this.props.lasts
+    var minMargin = this.props.minMargin
 
-    // var Lasts = setTimeout(randomFunc, 1000)
-    const node = this.node
-    const dataMax = max(Lasts)
+    const svg = this.node
+    const dataMax = max(profit)
     const yScale = scaleLinear()
     .domain([0, dataMax])
     .range([0, 600])
+    // const yAxis = .scale(yScale)
+
+    select(svg)
+    .selectAll("body")
 
     //enter
-    select(node)
+    select(svg)
     .selectAll('rect')
-    .data(Lasts)
+    .data(profit)
     .enter()
     .append('rect')
 
-
     //exit
-    select(node)
+    select(svg)
     .selectAll('rect')
-    .data(Lasts)
+    .data(profit)
     .exit()
     .remove()
 
     //update
-    select(node)
+    select(svg)
     .selectAll('rect')
     .attr('height', d => yScale(d))
     .attr('width', 25)
     .attr('x', (d,i) => i * 25)
     .attr('y', d => 600 - yScale(d))
     .style('fill', function(d) {
-      if(d > 99) {return 'green'}
+      if(d > minMargin) {return 'green'}
       else {return 'black'}
     })
   }
 
   render() {
-    return <svg ref={node => this.node = node}
+    return <svg ref={svg => this.node = svg}
       width={500} height={500}></svg>
     }
   }
