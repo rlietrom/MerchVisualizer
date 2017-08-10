@@ -47156,7 +47156,7 @@ var App = function (_Component) {
       axios({
         method: 'GET',
         // url: 'http://localhost:3000/getfutures'
-        url: 'https://merch-visualizer.herokuapp.com/'
+        url: 'https://merch-visualizer.herokuapp.com/getfutures'
       }).then(function (resp) {
         if (resp.data.success) {
           var lasts = resp.data.lists.map(function (obj) {
