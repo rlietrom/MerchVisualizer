@@ -25,8 +25,8 @@ class App extends Component {
   componentWillMount() {
     axios({
       method: 'GET',
-      url: 'http://localhost:3000/getfutures'
-      // url: 'https://merch-visualizer.herokuapp.com/'
+      // url: 'http://localhost:3000/getfutures'
+      url: 'https://merch-visualizer.herokuapp.com/'
     })
     .then(resp => {
       if(resp.data.success) {
@@ -75,7 +75,9 @@ class App extends Component {
   settingsContainer() {
     return (
       <Grid centered columns={2} divided>
-        <Grid.Row padded relaxed stackable >
+        <Grid.Row
+          // padded relaxed stackable
+          >
           <Grid.Column width={4} >
             <Segment>Settings
               <Form>
