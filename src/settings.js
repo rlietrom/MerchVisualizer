@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, Input, Form} from 'semantic-ui-react'
+import {Button, Input, Form, Group} from 'semantic-ui-react'
 
 export default class Settings extends Component {
   constructor(props){
@@ -22,17 +22,20 @@ export default class Settings extends Component {
     return (
       <div>
         <Form>
-            <Form.Field inline>
+            <Form.Field>
               <label>spot/quote</label>
               <Input
-                placeholder='.91'
+                width={6}
+                placeholder='.86'
                 onChange={(e) => this.setState({quote: e.target.value})}/>
               <label>minimum profit margin</label>
               <Input
+                width={3}
                 placeholder='.08'
                 onChange={(e) => this.setState({minMargin: e.target.value})}/>
               <label>expected cost per month</label>
               <Input
+                width={3}
                 placeholder='.02'
                 onChange={(e) => this.setState({expectedCosts: e.target.value})}/>
             </Form.Field>

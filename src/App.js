@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-import {Button, Form, Input, List, Header} from 'semantic-ui-react'
+// import './App.css';
+import {Button, Form, Input, List, Header, Grid, Segment} from 'semantic-ui-react'
 import BarChart from './barchart'
 import Settings from './settings'
 var axios = require('axios');
@@ -20,7 +20,6 @@ class App extends Component {
     }
     this.settingsContainer = this.settingsContainer.bind(this)
     this.calculateProfit = this.calculateProfit.bind(this)
-    this.showProfit = this.showProfit.bind(this)
   }
 
   componentWillMount() {
@@ -32,6 +31,7 @@ class App extends Component {
     .then(resp => {
       if(resp.data.success) {
         var lasts = resp.data.lists.map((obj) => { return obj.last*.01 })
+        console.log('LASTS', lasts)
         var profits = lasts.map((future, index) => {
           var physical;
           var months = index + 1
@@ -39,6 +39,7 @@ class App extends Component {
           else {physical = this.state.spot}
           return future - physical - (this.state.costs*months)
         })
+        console.log('PROFITSWILLMOUNT', profits)
         this.setState({profitsArr: profits, lasts:lasts})
       } else {
         console.log('not successful /getfutures')
@@ -48,17 +49,14 @@ class App extends Component {
 
   changeCosts(e) {
     this.setState({costs: e.target.value})
-    this.calculateProfit()
   }
 
   changeMinMargin(e) {
     this.setState({minMargin: e.target.value})
-    this.calculateProfit()
   }
 
   changeQuote(e) {
     this.setState({quote: e.target.value})
-    this.calculateProfit()
   }
 
   calculateProfit() {
@@ -67,67 +65,62 @@ class App extends Component {
       var months = index + 1
       if(this.state.quote) {physical = this.state.quote}
       else {physical = this.state.spot}
+      console.log('FUTURE, PHYS, COSTS', future, physical, this.state.costs, months)
       return future - physical - (this.state.costs*months)
     })
+    console.log('PROFITS', profits)
     this.setState({profitsArr: profits})
   }
 
   settingsContainer() {
     return (
-      <div>
-        <Form>
-          <Form.Field inline>
-            <label>spot/quote</label>
-            <Input
-              placeholder='.91'
-              onChange={(e) => this.changeCosts(e)}/>
-              <label>minimum profit margin</label>
-              <Input
-                placeholder='.08'
-                onChange={(e) => this.changeMinMargin(e)}/>
-                <label>expected cost per month</label>
-              <Input
-                placeholder='.02'
-                onChange={(e) => this.changeCosts(e)}/>
-            </Form.Field>
-          </Form>
-        </div>
-        )
-      }
-        showProfit() {
-          return (
-            <div>
-              <Header>Profits</Header>
-              <List>
-                {this.state.profitsArr.map((profit) =>
-                  <List.Item>{profit}</List.Item>
-                )
-              }
-              </List>
+      <Grid centered columns={2} divided>
+        <Grid.Row padded relaxed stackable >
+          <Grid.Column width={4} >
+            <Segment>Settings
+              <Form>
+                <Form.Field>
+                  <label>spot/quote</label>
+                  <Form.Input
+                    placeholder='.91'
+                    onChange={(e) => this.changeQuote(e)}/>
+                    <label>minimum profit margin</label>
+                    <Form.Input
+                      placeholder='.08'
+                      onChange={(e) => this.changeMinMargin(e)}/>
+                      <label>cost per month</label>
+                      <Form.Input
+                        placeholder='.02'
+                        onChange={(e) => this.changeCosts(e)}/>
+                        <Form.Button
+                          basic
+                          type='submit'
+                          onClick={() => this.calculateProfit()}>Apply</Form.Button>
+                        </Form.Field>
+                      </Form>
+                    </Segment>
+                  </Grid.Column>
+                  <Grid.Column width={12}>
+                    <Segment>
+                      <BarChart
+                        key="123123123"
+                        profit={this.state.profitsArr}
+                        lasts={this.state.lasts}
+                        minMargin={this.state.minMargin}
+                      />
+                    </Segment>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            )
+          }
+
+          render() {
+            return (
+            <div className="App">
+              {this.settingsContainer()}
             </div>
           )
+          }
         }
-
-
-        render() {
-          console.log('RENDER', this.state.profitsArr, this.state.lasts)
-          return (
-            <div className="App">
-              <Button
-                onClick={() => this.getFutures()}
-                >hello
-              </Button>
-              <BarChart
-                key="123123123"
-                profit={this.state.profitsArr}
-                lasts={this.state.lasts}
-                minMargin={this.state.minMargin}
-              />
-              {this.settingsContainer()}
-              {this.showProfit()}
-            </div>
-          );
-        }
-      }
-
-      export default App;
+        export default App;

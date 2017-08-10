@@ -27,11 +27,8 @@ class BarChart extends Component {
     const dataMax = max(profit)
     const yScale = scaleLinear()
     .domain([0, dataMax])
-    .range([0, 600])
+    .range([-300, 300])
     // const yAxis = .scale(yScale)
-
-    select(svg)
-    .selectAll("body")
 
     //enter
     select(svg)
@@ -51,18 +48,18 @@ class BarChart extends Component {
     select(svg)
     .selectAll('rect')
     .attr('height', d => yScale(d))
-    .attr('width', 25)
-    .attr('x', (d,i) => i * 25)
-    .attr('y', d => 600 - yScale(d))
+    .attr('width', 37)
+    .attr('x', (d,i) => i * 40)
+    .attr('y', d => 300 - yScale(d))
     .style('fill', function(d) {
-      if(d > minMargin) {return 'green'}
-      else {return 'black'}
+      if(d > minMargin) {return 'black'}
+      else {return 'MidnightBlue'}
     })
   }
 
   render() {
     return <svg ref={svg => this.node = svg}
-      width={500} height={500}></svg>
+     width={600} height={620}></svg>
     }
   }
   export default BarChart;
