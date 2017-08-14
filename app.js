@@ -12,7 +12,6 @@ connect = mongoose.connect(process.env.MONGODB_URI);
 app.get('/getfutures', function(req,res){
   FuturesList.find({})
   .then((list) => {
-    console.log('LIST getfutures', list)
     res.json({success: true, lists: list})
   })
 })
