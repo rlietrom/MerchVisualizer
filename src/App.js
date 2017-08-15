@@ -31,8 +31,8 @@ class App extends Component {
   componentWillMount() {
     axios({
       method: 'GET',
-      url: 'http://localhost:3000/getfutures'
-      // url: 'https://merch-visualizer.herokuapp.com/getfutures'
+      // url: 'http://localhost:3000/getfutures'
+      url: 'https://merch-visualizer.herokuapp.com/getfutures'
     })
     .then(resp => {
       if(resp.data.success) {
@@ -185,6 +185,9 @@ class App extends Component {
                               <List.Item>The daily spot price is a good place to start, but I suggest calling suppliers to get real quotes on product</List.Item></List>}
                             basic
                           />
+                        </Segment>
+                        <Segment>
+
                         </Segment>
                       </Grid.Column>
                       <Grid.Column width={10} stretched={true}>
