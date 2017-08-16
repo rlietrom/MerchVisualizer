@@ -32,8 +32,8 @@ class App extends Component {
   componentWillMount() {
     axios({
       method: 'GET',
-      // url: 'http://localhost:3000/getfutures'
-      url: 'https://merch-visualizer.herokuapp.com/getfutures'
+      url: 'http://localhost:3000/getfutures'
+      // url: 'https://merch-visualizer.herokuapp.com/getfutures'
     })
     .then(resp => {
       if(resp.data.success) {
@@ -46,7 +46,8 @@ class App extends Component {
           var months = index + 1
           if(this.state.quote) {physical = this.state.quote}
           else {physical = this.state.spot}
-          var actualProfit = future.last*0.01 - physical - (this.state.fixedCost + this.state.costs*months)
+          future.last = future.last*.01
+          var actualProfit = future.last - physical - (this.state.fixedCost + this.state.costs*months)
           var label =  future.month_year.substring(0, 3)
           var margProfit;
           if(index === 0) {margProfit = actualProfit}
@@ -59,7 +60,7 @@ class App extends Component {
           future.month_year = label
           return future
         })
-        console.log('profit max', profitMax, profitMaxMonth)
+        console.log('newArr', newArr)
         this.setState({data: newArr, profitMax: profitMax, profitMaxMonth: profitMaxMonth, open: true})
       } else {
         console.log('not successful /getfutures')

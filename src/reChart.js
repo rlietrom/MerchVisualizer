@@ -12,7 +12,7 @@ class ReChart extends Component{
   render () {
     var data = this.props.data
     data.map((month) => {
-      month.last = parseFloat((month.last*.01).toFixed(5))
+      month.last = parseFloat(month.last.toFixed(5))
       month.marginal_profit = parseFloat(month.marginal_profit.toFixed(5))
       month.profit = parseFloat(month.profit.toFixed(5))
     })
