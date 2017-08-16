@@ -19,7 +19,7 @@ class App extends Component {
       costs: .003,
       data: [],
       fut: false,
-      prof: false,
+      prof: true,
       marg: false,
       dollarsPerPound: true,
       open: false
