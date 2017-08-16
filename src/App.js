@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import './App.css';
-import {Button, Form, Input, List, Header, Grid, Segment, Radio, Checkbox, Icon, Popup, Statistic} from 'semantic-ui-react'
+import {Button, Form, Input, List, Header, Grid, Segment, Radio, Checkbox, Icon, Popup, Statistic, Modal} from 'semantic-ui-react'
 import BarChart from './barchart'
 import ReChart from './reChart'
 import Settings from './settings'
@@ -21,7 +21,8 @@ class App extends Component {
       fut: false,
       prof: false,
       marg: false,
-      dollarsPerPound: true
+      dollarsPerPound: true,
+      open: false
     }
     // this.changeUnits = this.changeUnits.bind(this)
     this.calculateProfit = this.calculateProfit.bind(this)
@@ -31,8 +32,8 @@ class App extends Component {
   componentWillMount() {
     axios({
       method: 'GET',
-      // url: 'http://localhost:3000/getfutures'
-      url: 'https://merch-visualizer.herokuapp.com/getfutures'
+      url: 'http://localhost:3000/getfutures'
+      // url: 'https://merch-visualizer.herokuapp.com/getfutures'
     })
     .then(resp => {
       if(resp.data.success) {
@@ -59,7 +60,7 @@ class App extends Component {
           return future
         })
         console.log('profit max', profitMax, profitMaxMonth)
-        this.setState({data: newArr, profitMax: profitMax, profitMaxMonth: profitMaxMonth})
+        this.setState({data: newArr, profitMax: profitMax, profitMaxMonth: profitMaxMonth, open: true})
       } else {
         console.log('not successful /getfutures')
       }
@@ -136,8 +137,36 @@ class App extends Component {
     }
   }
 
+  close() {
+    this.setState
+  }
+  modal() {
+    console.log('MODAL')
+    return (
+      <Modal dimmer='blurring' open={this.state.open}>
+        <Modal.Header textAlign='center'>You're about to enter Merch Visualizer</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            <Header>Preface</Header>
+            <p>Last year, I bought a semi-truck sized load of milk powder, sold futures against it, stored the load in a warehouse for six months, and made $4,465 of profit. </p>
+            <Header>Why and how?</Header>
+            <List>
+              <List.Item>1. The market was inefficient.</List.Item>
+              <List.Item>2. I was in the right place at the right time.</List.Item>
+            </List>
+            <Header>What if we could make this arbitrage available to anyone with investing dollars?</Header>
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button labelPosition='right' content="Enter" onClick={() => this.setState({open: !this.state.open})}></Button>
+        </Modal.Actions>
+      </Modal>
+    )
+  }
+
   settingsContainer() {
     return (
+      //modal
       <Grid centered columns={2} divided padded={true}>
         <Grid.Row columns={1}>
           <Grid.Column>
@@ -149,45 +178,45 @@ class App extends Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-            <Grid.Column width={3} >
-              <Segment textAlign='right'>
-                <Header.Content as='h3'>Settings</Header.Content>
-                <Form>
-                  <Form.Field>
-                    <label>spot/quote</label>
+          <Grid.Column width={3} >
+            <Segment textAlign='right'>
+              <Header.Content as='h3'>Settings</Header.Content>
+              <Form>
+                <Form.Field>
+                  <label>spot/quote</label>
+                  <Form.Input
+                    textAlign='right'
+                    placeholder={this.state.spot}
+                    onChange={(e) => this.changeQuote(e)}/>
+                    <label>minimum profit margin</label>
                     <Form.Input
-                      textAlign='right'
-                      placeholder={this.state.spot}
-                      onChange={(e) => this.changeQuote(e)}/>
-                      <label>minimum profit margin</label>
+                      placeholder='.08'
+                      onChange={(e) => this.changeMinMargin(e)}/>
+                      <label>fixed costs</label>
                       <Form.Input
-                        placeholder='.08'
-                        onChange={(e) => this.changeMinMargin(e)}/>
-                        <label>fixed costs</label>
+                        placeholder='.01'
+                        onChange={(e) => this.changeFixedCost(e)}/>
+                        <label>cost per month</label>
                         <Form.Input
-                          placeholder='.01'
-                          onChange={(e) => this.changeFixedCost(e)}/>
-                          <label>cost per month</label>
-                          <Form.Input
-                            placeholder='.003'
-                            onChange={(e) => this.changeCosts(e)}/>
-                              <Form.Button
-                                basic
-                                type='submit'
-                                onClick={(e) => this.calculateProfit(e)}>Apply</Form.Button>
-                            </Form.Field>
-                          </Form>
-                          <Popup
-                            trigger={<Button circular={true} size='medium' basic compact={true}>?</Button>}
-                            content={<List bulleted>
-                              <List.Item>Calculations are based on a 41,000 lb load size</List.Item>
-                              <List.Item>Placeholders represent fixed (paperwork, 'in & out' fees for warehouses) and variable costs (monthly warehouse fees) from my personal experience but it's up to each user to do their own research</List.Item>
-                              <List.Item>The daily spot price is a good place to start, but I suggest calling suppliers to get real quotes on product</List.Item></List>}
+                          placeholder='.003'
+                          onChange={(e) => this.changeCosts(e)}/>
+                          <Form.Button
+                            basic
+                            type='submit'
+                            onClick={(e) => this.calculateProfit(e)}>Apply</Form.Button>
+                          </Form.Field>
+                        </Form>
+                        <Popup
+                          trigger={<Button circular={true} size='medium' basic compact={true}>?</Button>}
+                          content={<List bulleted>
+                            <List.Item>Calculations are based on a 41,000 lb load size</List.Item>
+                            <List.Item>Placeholders represent fixed (paperwork, 'in & out' fees for warehouses) and variable costs (monthly warehouse fees) from my personal experience but it's up to each user to do their own research</List.Item>
+                            <List.Item>The daily spot price is a good place to start, but I suggest calling suppliers to get real quotes on product</List.Item></List>}
                             basic
                           />
                         </Segment>
                         <Segment>
-
+                          <p>Questions on how to use this tool? Email me at ostrom@wharton.upenn.edu</p>
                         </Segment>
                       </Grid.Column>
                       <Grid.Column width={10} stretched={true}>
@@ -224,19 +253,20 @@ class App extends Component {
                           </Segment>
                         </Grid.Column>
                         {/* <Grid.Column width={3}>
-                        </Grid.Column> */}
-                      </Grid.Row>
-                    </Grid>
-                  )
-                }
-
-                render() {
-                  console.log('this.state.radio', this.state.radio)
-                  return (
-                    <div className="App">
-                      {this.settingsContainer()}
-                    </div>
-                  )
-                }
+                      </Grid.Column> */}
+                    </Grid.Row>
+                  </Grid>
+                )
               }
-              export default App;
+
+              render() {
+                console.log('this.state.radio', this.state.radio)
+                return (
+                  <div className="App">
+                    {this.modal()}
+                    {this.settingsContainer()}
+                  </div>
+                )
+              }
+            }
+            export default App;
