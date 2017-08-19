@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import './App.css';
-import {Button, Form, Input, List, Header, Grid, Segment, Radio, Checkbox, Icon, Popup, Statistic, Modal} from 'semantic-ui-react'
+import {Button, Form, Input, List, Header, Grid, Image, Segment, Radio, Checkbox, Icon, Popup, Statistic, Modal} from 'semantic-ui-react'
 import BarChart from './barchart'
 import ReChart from './reChart'
 import Settings from './settings'
@@ -20,7 +20,7 @@ class App extends Component {
       data: [],
       fut: false,
       prof: true,
-      marg: false,
+      marg: true,
       dollarsPerPound: true,
       open: false
     }
@@ -32,8 +32,8 @@ class App extends Component {
   componentWillMount() {
     axios({
       method: 'GET',
-      // url: 'http://localhost:3000/getfutures'
-      url: 'https://merch-visualizer.herokuapp.com/getfutures'
+      url: 'http://localhost:3000/getfutures'
+      // url: 'https://merch-visualizer.herokuapp.com/getfutures'
     })
     .then(resp => {
       if(resp.data.success) {
@@ -78,7 +78,6 @@ class App extends Component {
   }
   changeMinMargin(e) {
     var minMargin = parseFloat(e.target.value)
-    console.log('min margin', minMargin, typeof minMargin)
     this.setState({minMargin: minMargin})
   }
   changeQuote(e) {
@@ -87,14 +86,11 @@ class App extends Component {
   }
   changeFixedCost(e) {
     var fixedCost = parseFloat(e.target.value)
-    console.log('change fixedCost', fixedCost)
     this.setState({fixedCost: fixedCost})
   }
 
   calculateProfit(e) {
     e.preventDefault()
-    console.log('typeOF quote', typeof this.state.quote, typeof this.state.fixedCost, typeof this.state.costs)
-    console.log('this.state.quote', this.state.quote)
     var updatedArr = this.state.data.map((future, index) => {
       var physical;
       var months = index + 1
@@ -152,7 +148,7 @@ class App extends Component {
             <p>Last year, I bought a semi-truck sized load of milk powder, sold futures against it, stored the load in a warehouse for six months, and made $4,465 of profit. </p>
             <Header>Why and how?</Header>
             <List>
-              <List.Item>1. The market was inefficient.</List.Item>
+              <List.Item>1. The market was inefficient and small.</List.Item>
               <List.Item>2. I was in the right place at the right time.</List.Item>
             </List>
             <Header>What if we could make this arbitrage available to anyone with investing dollars?</Header>
@@ -168,13 +164,13 @@ class App extends Component {
   settingsContainer() {
     return (
       //modal
+
       <Grid centered columns={2} divided padded={true}>
         <Grid.Row columns={1}>
           <Grid.Column>
-            <Segment compact={false} textAlign='center'>
-              <Header.Content as='h1'>Cash & Carry Visualizer: Non-fat Dry Milk
-                <Header.Subheader as='h4'>A tool for quickly examining a commodity's futures vs. spot price arbitrage opportunity.</Header.Subheader>
-              </Header.Content>
+            <Segment size='mini' compact={false} textAlign='center'>
+              <img width='400px' src={'http://res.cloudinary.com/dbcjaputq/image/upload/v1503092750/logo_nwc3ei.png'} alt='hiiii'></img>
+              <Header as='h4'>A tool for quickly examining milk powder cash and carry opportunities.</Header>
             </Segment>
           </Grid.Column>
         </Grid.Row>

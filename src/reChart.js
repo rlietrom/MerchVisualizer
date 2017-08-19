@@ -24,7 +24,7 @@ class ReChart extends Component{
     var dollarsPerPound = this.props.dollarsPerPound
     return (
       <div>
-        <ResponsiveContainer width='100%' height='100%' aspect={1.6}>
+        <ResponsiveContainer width='90%' height='80%' aspect={1.6}>
           <BarChart
             margin={{top: 10, right: 10, left: 10, bottom: 10}}
             data={data}

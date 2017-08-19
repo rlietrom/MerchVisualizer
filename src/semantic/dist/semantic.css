@@ -11776,8 +11776,8 @@ i.icon.times.rectangle.outline:before {
   background-color: transparent;
 }
 
-img.ui.image {
-  display: block;
+.ui.image {
+  display: inline-block !important;
 }
 
 .ui.image svg,
