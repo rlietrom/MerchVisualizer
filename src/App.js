@@ -15,25 +15,29 @@ class App extends Component {
       spot: .85,
       quote: null,
       minMargin: .05,
-      fixedCost: .01,
+      transportationCost: .0078,
+      inAndOut: 0.00158,
       costs: .003,
       data: [],
       fut: false,
       prof: true,
       marg: true,
       dollarsPerPound: true,
-      open: false
+      open: false,
+      // radio: '$/lb'
     }
     // this.changeUnits = this.changeUnits.bind(this)
     this.calculateProfit = this.calculateProfit.bind(this)
     this.settingsContainer = this.settingsContainer.bind(this)
+    // this.handleRadioChange = this.handleRadioChange.bind(this)
+    // this.handleRadioChange2 = this.handleRadioChange2.bind(this)
   }
 
   componentWillMount() {
     axios({
       method: 'GET',
-      // url: 'http://localhost:3000/getfutures'
-      url: 'https://merch-visualizer.herokuapp.com/getfutures'
+      url: 'http://localhost:3000/getfutures'
+      // url: 'https://merch-visualizer.herokuapp.com/getfutures'
     })
     .then(resp => {
       if(resp.data.success) {
@@ -47,7 +51,7 @@ class App extends Component {
           if(this.state.quote) {physical = this.state.quote}
           else {physical = this.state.spot}
           future.last = future.last*.01
-          var actualProfit = future.last - physical - (this.state.fixedCost + this.state.costs*months)
+          var actualProfit = future.last - physical - (this.state.transportationCost + this.state.costs*months)
           var label =  future.month_year.substring(0, 3)
           var margProfit;
           if(index === 0) {margProfit = actualProfit}
@@ -69,7 +73,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-
   }
 
   changeCosts(e) {
@@ -84,9 +87,22 @@ class App extends Component {
     var quote = parseFloat(e.target.value)
     this.setState({quote: quote})
   }
-  changeFixedCost(e) {
-    var fixedCost = parseFloat(e.target.value)
-    this.setState({fixedCost: fixedCost})
+  changeTransportationCost(e) {
+    var transportationCost = parseFloat(e.target.value)
+    if(this.state.radio === '$/lb') {
+      console.log('transportationCost', transportationCost)
+    this.setState({transportationCost: transportationCost})
+    }
+    else {
+      transportationCost = transportationCost/41000
+      console.log('transportation cost / 41000', transportationCost)
+      this.setState({transportationCost: transportationCost})
+    }
+  }
+
+  changeInAndOut(e) {
+    var inAndOut = parseFloat(e.target.value)
+    this.setState({inAndOut: inAndOut})
   }
 
   calculateProfit(e) {
@@ -96,7 +112,8 @@ class App extends Component {
       var months = index + 1
       if(this.state.quote) {physical = this.state.quote}
       else {physical = this.state.spot}
-      future["profit"] = future["last"] - physical - (this.state.fixedCost + this.state.costs*months)
+      if(this.state.radio === '$/lb')
+      future["profit"] = future["last"] - physical - (this.state.transportationCost + this.state.costs*months)
       future["marginal_profit"] = (future["profit"])/months
       future["minMargin"] = this.state.minMargin
       return future
@@ -104,9 +121,19 @@ class App extends Component {
     this.setState({data: updatedArr})
   }
 
-  handleChange(e, {value}) {
-    this.setState({value})
-  }
+  // handleChange(e, {value}) {
+  //   this.setState({value})
+  // }
+
+  // handleRadioChange() {
+  //   console.log('radio: $')
+  //   this.setState({radio: '$'})
+  // }
+  //
+  // handleRadioChange2() {
+  //   console.log('radio: $/lb')
+  //   this.setState({radio: '$/lb'})
+  // }
 
   changeUnits(e) {
     if(this.state.dollarsPerPound) {
@@ -134,9 +161,6 @@ class App extends Component {
     }
   }
 
-  close() {
-    this.setState
-  }
   modal() {
     console.log('MODAL')
     return (
@@ -161,16 +185,15 @@ class App extends Component {
     )
   }
 
+
   settingsContainer() {
     return (
-      //modal
-
       <Grid centered columns={2} divided padded={true}>
         <Grid.Row columns={1}>
           <Grid.Column>
             <Segment size='mini' compact={false} textAlign='center'>
-              <img width='400px' src={'http://res.cloudinary.com/dbcjaputq/image/upload/v1503092750/logo_nwc3ei.png'} alt='hiiii'></img>
-              <Header as='h4'>A tool for quickly examining milk powder cash and carry opportunities.</Header>
+              <Image size='medium' centered={true} src='http://res.cloudinary.com/dbcjaputq/image/upload/v1503092750/logo_nwc3ei.png'></Image>
+              <Header as='h5'>A tool for quickly examining milk powder cash and carry opportunities. Brought to you by OG Merchants.</Header>
             </Segment>
           </Grid.Column>
         </Grid.Row>
@@ -179,20 +202,29 @@ class App extends Component {
             <Segment textAlign='right'>
               <Header.Content as='h3'>Settings</Header.Content>
               <Form>
+                <Grid.Row>
+                  {/* <Form.Field label='$' checked={this.state.radio === '$'} control={Radio} onChange={() => this.handleRadioChange()}></Form.Field> */}
+                  {/* <Form.Field label='$/lb' checked={this.state.radio === '$/lb'} control={Radio} onChange={() => this.handleRadioChange2()}></Form.Field> */}
+                </Grid.Row>
                 <Form.Field>
                   <label>spot/quote</label>
                   <Form.Input
-                    textAlign='right'
-                    placeholder={this.state.spot}
+                    placeholder={'$0.85'}
+                    // textAlign='right'
+                    // value={this.state.spot}
                     onChange={(e) => this.changeQuote(e)}/>
                     <label>minimum profit margin</label>
                     <Form.Input
-                      placeholder='.08'
+                      placeholder={'$0.08'}
                       onChange={(e) => this.changeMinMargin(e)}/>
-                      <label>fixed costs</label>
+                      <label>transportation costs</label>
                       <Form.Input
-                        placeholder='.01'
-                        onChange={(e) => this.changeFixedCost(e)}/>
+                        placeholder={'$0.0078'}
+                        onChange={(e) => this.changeTransportationCost(e)}/>
+                        <label>in & out fee</label>
+                        <Form.Input
+                          placeholder={'$0.00158'}
+                          onChange={(e) => this.changeInAndOut(e)}/>
                         <label>cost per month</label>
                         <Form.Input
                           placeholder='.003'
@@ -212,8 +244,9 @@ class App extends Component {
                             basic
                           />
                         </Segment>
-                        <Segment>
-                          <p>Questions on how to use this tool? Email me at ostrom@wharton.upenn.edu</p>
+                        <Segment textAlign='right'>
+                          <p>View <a target="_blank" href="https://youtu.be/P57drjkXgFk">tutorial.</a> </p>
+                          <p>Questions? Email me at rlietrom@gmail.com</p>
                         </Segment>
                       </Grid.Column>
                       <Grid.Column width={10} stretched={true}>
