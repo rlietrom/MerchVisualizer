@@ -36,8 +36,8 @@ class App extends Component {
   componentWillMount() {
     axios({
       method: 'GET',
-      url: 'http://localhost:3000/getfutures'
-      // url: 'https://merch-visualizer.herokuapp.com/getfutures'
+      // url: 'http://localhost:3000/getfutures'
+      url: 'https://merch-visualizer.herokuapp.com/getfutures'
     })
     .then(resp => {
       if(resp.data.success) {
@@ -245,7 +245,7 @@ class App extends Component {
                           />
                         </Segment>
                         <Segment textAlign='right'>
-                          <p>View <a target="_blank" href="https://youtu.be/P57drjkXgFk">tutorial.</a> </p>
+                          <p>View <a target="_blank" href="https://youtu.be/VQG_dNpTxlk">tutorial.</a> </p>
                           <p>Questions? Email me at rlietrom@gmail.com</p>
                         </Segment>
                       </Grid.Column>
